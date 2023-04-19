@@ -10,8 +10,22 @@ public:
 
 	Rational(int numerator, int denominator)
 	{
-		_numerator = numerator / gcd(numerator, denominator);
-		_denominator = denominator / gcd(numerator, denominator);	
+		if (numerator == 0) {
+			_numerator = 0;
+			_denominator = 1;
+		} else {
+			int sign = (numerator / abs(numerator)) * (denominator / abs(denominator));
+
+			numerator = abs(numerator);
+			denominator = abs(denominator);
+
+			int tmp_gcd = gcd(numerator, denominator);
+
+			_numerator = numerator / tmp_gcd;
+			_denominator = denominator / tmp_gcd;	
+			
+			_numerator *= sign;
+		}
 	}
 
 	int Numerator() const
@@ -27,15 +41,12 @@ public:
 private:
 	int gcd(int lhs, int rhs)
 	{
-		int i = 10;
-		while (lhs != rhs && i > 0) {
-			std::cout << "lhs - " << lhs << " rhs - " << rhs << '\n';
+		while ((lhs != rhs)) {
 			if (lhs > rhs) {
 				lhs -= rhs;
 			} else {
 				rhs -= lhs;
 			}
-			--i;
 		}
 
 		return lhs;
